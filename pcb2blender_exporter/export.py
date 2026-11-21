@@ -80,7 +80,7 @@ def export_pcb3d(
                 ToMM2D(pad.GetSize()),
                 pad.GetOrientation().AsRadians(),
                 pad.GetRoundRectRadiusRatio(),
-                DrillShape(pad.GetDrillShape()),
+                get_drill_shape(pad),
                 ToMM2D(pad.GetDrillSize()),
                 PadFabType(pad.GetProperty()),
             )
@@ -89,6 +89,14 @@ def export_pcb3d(
         PCB3D(bounds, get_stackup(board), boarddefs, pads).write(
             file, wrl_path, components_path, layers_path
         )
+
+
+def get_drill_shape(pad: pcbnew.PAD) -> DrillShape:
+    # KiCad 10: PAD_DRILL_SHAPE_UNDEFINED = 0, CIRCLE = 1, OBLONG = 2
+    # .pcb3d format: CIRCULAR = 0, OVAL = 1
+    if pad.GetDrillShape() == pcbnew.PAD_DRILL_SHAPE_OBLONG:
+        return DrillShape.OVAL
+    return DrillShape.CIRCULAR
 
 
 def get_boarddefs(board: pcbnew.BOARD):

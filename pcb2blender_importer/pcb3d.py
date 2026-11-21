@@ -90,10 +90,6 @@ class DrillShape(Enum):
 
     @classmethod
     def _missing_(cls, value: Any):
-        if value == 1:
-            return cls.CIRCULAR
-        elif value == 2:
-            return cls.OVAL
         warning(f"unknown drill shape '{value}'")
         return cls.UNKNOWN
 
@@ -106,6 +102,7 @@ class PadFabType(Enum):
     HEATSINK = 5
     CASTELLATED = 6
     MECHANICAL = 7
+    PRESSFIT = 8
 
     @classmethod
     def _missing_(cls, value: Any):
